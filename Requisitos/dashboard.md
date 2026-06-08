@@ -21,7 +21,7 @@ A barra de filtros deve permitir a combinação dinâmica de parâmetros (opera�
 * **RF-004 [Filtro de Origem]:** Componente *Select/Dropdown* para filtrar os processos pela unidade geradora (Ex: `SEE/SRE Januária/Aposentadori`, `SEF/SPGF-DAPE-DCTA`).
 * **RF-005 [Filtro de Status]:** Componente *Select/Dropdown* para filtrar pelo estado atual de tramitação do processo (`Análise Pendente`, `Em Triagem`, `Concluído`, etc.).
 * **RF-006 [Filtro de Etiquetas]:** Componente *Select/Dropdown* mapeado a partir dos marcadores retornados pela API (`Ouro`, `Idoso`, `Prata`, `Roxo`).
-    * Etiqueta visual. Utilizar `data.atributos.marcador.idCor` para estilizar a tag, além disso ao passar a mão no marcador deve aparecer a sua descrição que é representada por `data.atributos.marcador.texto`
+    * _Obs:_ Etiqueta visual. Utilizar `data.atributos.marcador.idCor` para estilizar a tag, além disso ao passar a mão no marcador deve aparecer a sua descrição que é representada por `data.atributos.marcador.texto`
 * **RF-007 [Filtro de Prioridade]:** Componente *Select/Dropdown* booleano para isolar processos marcados com prioridade urgente (`Sim` / `Não`).
 * **RF-008 [Filtro de Analista]:** Componente *Select/Dropdown* para filtrar por processos atribuídos a usuários específicos (Ex: `Maria Costa`, `João Silva`) ou `Não possui`.
 * **RF-009 [Minimizar Painel]:** O bloco de "Busca rápida e filtros" deve ser colapsável através de um gatilho de *accordion* no canto superior direito da seção.
