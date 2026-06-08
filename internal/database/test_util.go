@@ -7,7 +7,10 @@ import (
 	"errors"
 	"flag"
 	"fmt"
+	"log"
 	"net/url"
+	"os"
+	"strconv"
 	"testing"
 	"time"
 
@@ -23,6 +26,7 @@ const (
 	testDB       = "testdb"
 )
 
+// TestInstance é um wrapper em um banco de dados PostgreSQL baseado no Docker.
 type TestInstance struct {
 	skipReason string
 
@@ -33,23 +37,39 @@ type TestInstance struct {
 }
 
 func MustTestInstance() *TestInstance {
-	ti, err := NewTestInstance(context.Background())
+	ti, err := NewTestInstance()
 	if err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
 	return ti
 }
 
-func NewTestInstance(ctx context.Context) (*TestInstance, error) {
+// NewTestInstance cria uma nova instância do banco de dados PostgreSQL baseado no Docker.
+// Cria também um banco de dados inicial e aplica todas as migrações.
+//
+// Essa função não deve ser usada fora de testes, mas é exposta publicamente para facilitar
+// o reuso da lógica.
+//
+// Os testes podem ser pulados usando a flag `-short` ao executar os testes ou definindo
+// a variável de ambiente `SKIP_DATABASE_TESTS`.
+func NewTestInstance() (*TestInstance, error) {
 	if !flag.Parsed() {
 		flag.Parse()
 	}
 
 	if testing.Short() {
 		return &TestInstance{
-			skipReason: "Pulando testes com PostgreSQL (flag -short)",
+			skipReason: "Pulando testes de banco de dados (flag -short definida)",
 		}, nil
 	}
+
+	if skip, _ := strconv.ParseBool(os.Getenv("SKIP_DATABASE_TESTS")); skip {
+		return &TestInstance{
+			skipReason: "Pulando testes de banco de dados (SKIP_DATABASE_TESTS definido)",
+		}, nil
+	}
+
+	ctx := context.Background()
 
 	pool, err := dockertest.NewPool(ctx, "")
 	if err != nil {
