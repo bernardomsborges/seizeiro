@@ -16,12 +16,8 @@ import (
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
-var (
-	// Anonymous representa um usuário não autenticado.
-	Anonymous = &Usuario{}
-
-	cpfReplacer = strings.NewReplacer(".", "", "-", "")
-)
+// Anonymous representa um usuário não autenticado.
+var Anonymous = &Usuario{}
 
 type Usuario struct {
 	ID              uuid.UUID `json:"id"`
@@ -74,21 +70,27 @@ type CreateUsuarioParams struct {
 	Nome  string
 	CPF   string
 	Email string
-	// Senha é um campo opcional. Se for informado, um hash da senha será gerado.
+	// Senha é um campo opcional. Um hash só será gerado se for estiver presente.
 	Senha string
 }
 
 // CreateUsuario adiciona um novo usuário ao banco de dados. Retorna [ErrCPFTaken] ou [ErrEmailTaken] caso
 // haja dados duplicados.
 //
+// Se o CPF for inválido, retorna [ErrInvalidCPF].
+//
 // Se o domínio do email não for permitido, retorna [ErrForbiddenDomain].
 //
 // Se uma senha for informada, ela será validada pela função [ValidatePassword],
 // podendo retornar [*WeakPasswordError].
 func (s *Service) CreateUsuario(ctx context.Context, params CreateUsuarioParams) (*Usuario, error) {
-	nome := strings.Join(strings.Fields(params.Nome), " ")
-	cpf := cpfReplacer.Replace(params.CPF)
-	email := strings.TrimSpace(strings.ToLower(params.Email))
+	nome := normalizeNome(params.Nome)
+	cpf := normalizeCPF(params.CPF)
+	email := normalizeEmail(params.Email)
+
+	if err := ValidateCPF(cpf); err != nil {
+		return nil, err
+	}
 
 	addr, err := mail.ParseAddress(email)
 	if err != nil || addr.Address != email {

@@ -27,6 +27,9 @@ var (
 
 	// ErrForbiddenDomain é o erro retornado para tentativa de criar usuários com domínios não permitidos.
 	ErrForbiddenDomain = errors.New("email domain is fobidden")
+
+	// ErrInvalidCPF é o erro retornado quando um CPF é inválido.
+	ErrInvalidCPF = errors.New("cpf is invalid")
 )
 
 // WeakPasswordError é o erro retornado quando a senha informado por um usuário é fraca.

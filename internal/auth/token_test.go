@@ -16,7 +16,7 @@ func TestGetTokenOwner(t *testing.T) {
 
 	usuario, err := service.CreateUsuario(t.Context(), CreateUsuarioParams{
 		Nome:  "Fulano da Silva",
-		CPF:   "123.456.789-01",
+		CPF:   "123.456.789-09",
 		Email: "fulano.silva@planejamento.mg.gov.br",
 	})
 	if err != nil {
@@ -47,7 +47,7 @@ func TestGetTokenOwner_Expired(t *testing.T) {
 
 		usuario, err := service.CreateUsuario(t.Context(), CreateUsuarioParams{
 			Nome:  "Fulano da Silva",
-			CPF:   "123.456.789-01",
+			CPF:   "123.456.789-09",
 			Email: "fulano.silva@planejamento.mg.gov.br",
 		})
 		if err != nil {

@@ -15,7 +15,7 @@ func TestCreateUsuario(t *testing.T) {
 
 	params := CreateUsuarioParams{
 		Nome:  "Fulano da   Silva",
-		CPF:   "123.456.789-01",
+		CPF:   "123.456.789-09",
 		Email: "Fulano.Silva@planejamento.mg.gov.br",
 		Senha: "Abc123123",
 	}
@@ -27,7 +27,7 @@ func TestCreateUsuario(t *testing.T) {
 	if want := "Fulano da Silva"; usuario.Nome != want {
 		t.Fatalf("want %q, got %q", want, usuario.Nome)
 	}
-	if want := "12345678901"; usuario.CPF != want {
+	if want := "12345678909"; usuario.CPF != want {
 		t.Fatalf("want %q, got %q", want, usuario.CPF)
 	}
 	if want := "fulano.silva@planejamento.mg.gov.br"; usuario.Email != want {
@@ -44,7 +44,7 @@ func TestCreateUsuario_ErrEmailTaken(t *testing.T) {
 
 	params := CreateUsuarioParams{
 		Nome:  "Fulano da Silva",
-		CPF:   "123.456.789-01",
+		CPF:   "123.456.789-09",
 		Email: "fulano.silva@planejamento.mg.gov.br",
 		Senha: "Abc123123",
 	}
@@ -53,7 +53,7 @@ func TestCreateUsuario_ErrEmailTaken(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	params.CPF = "123.456.789-02"
+	params.CPF = "529.988.310-28"
 	_, err = service.CreateUsuario(t.Context(), params)
 	if !errors.Is(err, ErrEmailTaken) {
 		t.Fatalf("expected ErrEmailTaken, got %v", err)
@@ -66,7 +66,7 @@ func TestCreateUsuario_ErrCPFTaken(t *testing.T) {
 
 	params := CreateUsuarioParams{
 		Nome:  "Fulano da Silva",
-		CPF:   "123.456.789-01",
+		CPF:   "123.456.789-09",
 		Email: "fulano.silva@planejamento.mg.gov.br",
 		Senha: "Abc123123",
 	}
@@ -88,7 +88,7 @@ func TestGetUsuario(t *testing.T) {
 
 	usuario, err := service.CreateUsuario(t.Context(), CreateUsuarioParams{
 		Nome:  "Fulano da Silva",
-		CPF:   "123.456.789-01",
+		CPF:   "123.456.789-09",
 		Email: "fulano.silva@planejamento.mg.gov.br",
 	})
 	if err != nil {
@@ -120,7 +120,7 @@ func TestChangeSenha(t *testing.T) {
 
 	params := CreateUsuarioParams{
 		Nome:  "Fulano da Silva",
-		CPF:   "123.456.789-01",
+		CPF:   "123.456.789-09",
 		Email: "fulano.silva@planejamento.mg.gov.br",
 		Senha: "Abc123123",
 	}
@@ -165,7 +165,7 @@ func TestChangeSenha_ErrNoSenha(t *testing.T) {
 
 	params := CreateUsuarioParams{
 		Nome:  "Fulano da Silva",
-		CPF:   "123.456.789-01",
+		CPF:   "123.456.789-09",
 		Email: "fulano.silva@planejamento.mg.gov.br",
 	}
 	usuario, err := service.CreateUsuario(t.Context(), params)
